@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تقييم المحاضرة</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f5f7fb;margin:0;padding:24px}
+    .card{max-width:760px;margin:auto;background:#fff;padding:24px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    label{display:block;margin:16px 0 8px;font-weight:bold}
+    select, textarea{width:100%;padding:12px;border:1px solid #d0d7e2;border-radius:10px;font-size:16px}
+    button{margin-top:18px;background:#c8102e;color:#fff;border:none;padding:14px 20px;border-radius:10px;font-size:18px;cursor:pointer;width:100%}
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>تقييم المحاضرة</h2>
+  <form id="feedbackForm">
+    <label>تقييم المحتوى العلمي</label>
+    <select name="contentRating"><option>ممتاز</option><option>جيد جدًا</option><option>جيد</option><option>مقبول</option></select>
+    <label>تقييم وضوح الشرح</label>
+    <select name="clarityRating"><option>ممتاز</option><option>جيد جدًا</option><option>جيد</option><option>مقبول</option></select>
+    <label>هل المحاضرة مفيدة لعملك؟</label>
+    <select name="benefit"><option>نعم جدًا</option><option>إلى حد كبير</option><option>بشكل متوسط</option><option>لا</option></select>
+    <label>ملاحظات إضافية</label>
+    <textarea name="notes" rows="5"></textarea>
+    <button type="submit">إرسال التقييم</button>
+  </form>
+</div>
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzd31qE9bFDXnb2PlF5jfWepMVoLlO9tnqy1h72--7hj57rhmkKFwFwE3QFY8OMzj-/exec';
+document.getElementById('feedbackForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const feedback = Object.fromEntries(new FormData(e.target).entries());
+  const trainee = JSON.parse(localStorage.getItem('traineeData') || '{}');
+  const result = JSON.parse(localStorage.getItem('quizResult') || '{}');
+  const payload = { action:'feedback', ...trainee, score:result.score, percentage:result.percentage, ...feedback, submittedAt:new Date().toISOString() };
+  try {
+    if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbxzd31qE9bFDXnb2PlF5jfWepMVoLlO9tnqy1h72--7hj57rhmkKFwFwE3QFY8OMzj-/exec') {
+      await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    }
+  } catch(err) { console.error(err); }
+  alert('تم إرسال التقييم، شكرًا لك.');
+  window.location.href='index.html';
+});
+</script>
+</body>
+</html>
