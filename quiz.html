@@ -98,6 +98,12 @@
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzd31qE9bFDXnb2PlF5jfWepMVoLlO9tnqy1h72--7hj57rhmkKFwFwE3QFY8OMzj-/exec';
+  const trainee = JSON.parse(localStorage.getItem('traineeData') || '{}');
+
+if (!trainee.fullName || !trainee.employeeId || !trainee.email) {
+  alert('يجب تسجيل البيانات أولًا قبل بدء الاختبار.');
+  window.location.href = 'register.html';
+}
 const answers = {q1:'c', q2:'c', q3:'d', q4:'c', q5:'d', q6:'c', q7:'b', q8:'d', q9:'c', q10:'c'};
 let remaining = 15 * 60;
 let submitted = false;
