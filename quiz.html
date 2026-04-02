@@ -140,7 +140,7 @@ async function submitQuiz(auto=false){
     responses
   };
   try {
-    if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbxzd31qE9bFDXnb2PlF5jfWepMVoLlO9tnqy1h72--7hj57rhmkKFwFwE3QFY8OMzj-/exec') {
+   
       await fetch(APPS_SCRIPT_URL, {
         method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
       });
