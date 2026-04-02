@@ -7,27 +7,35 @@
   <style>
     body{font-family:Arial,sans-serif;background:#f5f7fb;margin:0;padding:24px}
     .card{max-width:760px;margin:auto;background:#fff;padding:24px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);text-align:center}
-    .pass{color:#0b7a27}.fail{color:#c8102e}
-    .btn{display:inline-block;margin-top:18px;background:#c8102e;color:#fff;text-decoration:none;padding:12px 20px;border-radius:10px}
+    h2{margin-top:0}
+    .pass{color:#0a7a2f}
+    .fail{color:#c8102e}
+    .score{font-size:28px;margin:20px 0}
+    .btn{display:inline-block;padding:12px 22px;background:#c8102e;color:#fff;text-decoration:none;border-radius:10px;font-size:18px}
   </style>
 </head>
 <body>
-<div class="card">
-  <h2>نتيجة الاختبار</h2>
-  <div id="content"></div>
-  <a class="btn" href="feedback.html">الانتقال إلى تقييم المحاضرة</a>
-</div>
+  <div class="card">
+    <h2>نتيجة الاختبار</h2>
+    <div id="resultBox"></div>
+    <a class="btn" href="feedback.html">الانتقال إلى تقييم المحاضرة</a>
+  </div>
+
 <script>
-const data = JSON.parse(localStorage.getItem('quizResult') || '{}');
-const passed = data.score >= 8;
-const el = document.getElementById('content');
-el.innerHTML = `
-  <p>الاسم: <strong>${data.fullName || '-'}</strong></p>
-  <p>الدرجة: <strong>${data.score || 0} / 10</strong></p>
-  <p>النسبة: <strong>${data.percentage || 0}%</strong></p>
-  <p class="${passed?'pass':'fail'}"><strong>${passed ? 'مبروك، لقد اجتزت الاختبار.' : 'لم تحقق درجة الاجتياز.'}</strong></p>
-  <p>${passed ? 'ستُرسل شهادة الاجتياز إلى بريدك الإلكتروني بعد معالجة النظام.' : 'يمكنك اعتماد سياسة إعادة الاختبار حسب ما تقرره الجهة المنظمة.'}</p>
-`;
+const result = JSON.parse(localStorage.getItem('quizResult') || '{}');
+const resultBox = document.getElementById('resultBox');
+
+if (!result.score && result.score !== 0) {
+  resultBox.innerHTML = '<p class="fail">لم يتم العثور على نتيجة الاختبار.</p>';
+} else {
+  const passed = result.score >= 8;
+  resultBox.innerHTML = `
+    <p class="${passed ? 'pass' : 'fail'}"><strong>${passed ? 'مبروك، تم الاجتياز' : 'لم يتم الاجتياز'}</strong></p>
+    <p class="score">الدرجة: ${result.score} / 10</p>
+    <p>النسبة: ${result.percentage}%</p>
+    <p>الحالة: ${result.pass}</p>
+  `;
+}
 </script>
 </body>
 </html>
